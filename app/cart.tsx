@@ -1,6 +1,7 @@
 import React from "react";
 import {
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -38,6 +39,7 @@ export default function CartScreen() {
               { backgroundColor: colors.surface, borderColor: colors.border },
             ]}
           >
+            <Image source={{ uri: item.image }} style={styles.thumbnail} />
             <View style={styles.itemInfo}>
               <Text style={[styles.productName, { color: colors.text }]}>
                 {item.name}
@@ -49,7 +51,10 @@ export default function CartScreen() {
             <View style={styles.controls}>
               <Pressable
                 onPress={() => removeFromCart(item)}
-                style={[styles.controlButton, { borderColor: colors.border }]}
+                style={({ pressed }) => [
+                  styles.controlButton,
+                  { borderColor: colors.border, opacity: pressed ? 0.6 : 1 },
+                ]}
               >
                 <Text style={[styles.controlText, { color: colors.text }]}>
                   -
@@ -60,7 +65,10 @@ export default function CartScreen() {
               </Text>
               <Pressable
                 onPress={() => addToCart(item)}
-                style={[styles.controlButton, { borderColor: colors.border }]}
+                style={({ pressed }) => [
+                  styles.controlButton,
+                  { borderColor: colors.border, opacity: pressed ? 0.6 : 1 },
+                ]}
               >
                 <Text style={[styles.controlText, { color: colors.text }]}>
                   +
@@ -82,7 +90,13 @@ export default function CartScreen() {
         </Text>
         <Pressable
           onPress={() => router.push("/checkout")}
-          style={[styles.checkoutButton, { backgroundColor: colors.primary }]}
+          style={({ pressed }) => [
+            styles.checkoutButton,
+            {
+              backgroundColor: colors.primary,
+              opacity: pressed || !cartItems.length ? 0.7 : 1,
+            },
+          ]}
           disabled={!cartItems.length}
         >
           <Text style={styles.checkoutText}>Go to Checkout</Text>
@@ -109,6 +123,11 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     gap: 12,
+  },
+  thumbnail: {
+    width: 56,
+    height: 56,
+    borderRadius: 12,
   },
   itemInfo: {
     flex: 1,

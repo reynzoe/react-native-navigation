@@ -2,6 +2,7 @@ import React from "react";
 import {
   Alert,
   FlatList,
+  Image,
   Pressable,
   StyleSheet,
   Text,
@@ -51,7 +52,8 @@ export default function CheckoutScreen() {
               { backgroundColor: colors.surface, borderColor: colors.border },
             ]}
           >
-            <View>
+            <Image source={{ uri: item.image }} style={styles.thumbnail} />
+            <View style={styles.rowBody}>
               <Text style={[styles.productName, { color: colors.text }]}>
                 {item.name}
               </Text>
@@ -77,7 +79,13 @@ export default function CheckoutScreen() {
         </Text>
         <Pressable
           onPress={handleCheckout}
-          style={[styles.checkoutButton, { backgroundColor: colors.primary }]}
+          style={({ pressed }) => [
+            styles.checkoutButton,
+            {
+              backgroundColor: colors.primary,
+              opacity: pressed || !cartItems.length ? 0.7 : 1,
+            },
+          ]}
           disabled={!cartItems.length}
         >
           <Text style={styles.checkoutText}>Checkout</Text>
@@ -103,6 +111,15 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    gap: 12,
+  },
+  thumbnail: {
+    width: 52,
+    height: 52,
+    borderRadius: 12,
+  },
+  rowBody: {
+    flex: 1,
   },
   productName: {
     fontSize: 16,
