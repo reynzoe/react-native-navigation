@@ -1,46 +1,96 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
-  Alert,
   FlatList,
   Image,
+  Modal,
   Pressable,
-  StyleSheet,
   Text,
   View,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useCartContext } from "../contexts/CartContext";
 import { useThemeContext } from "../contexts/ThemeContext";
+import { checkoutStyles } from "../styles/checkoutStyles";
 
 export default function CheckoutScreen() {
   const router = useRouter();
-  const { cartItems, cartTotal, clearCart } = useCartContext();
+  const { cartItems, clearCart, removeItems } = useCartContext();
   const { colors } = useThemeContext();
+  const [selectedIds, setSelectedIds] = useState<string[]>(
+    cartItems.map((item) => item.id)
+  );
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  useEffect(() => {
+    setSelectedIds((current) => {
+      const availableIds = cartItems.map((item) => item.id);
+      const next = current.filter((id) => availableIds.includes(id));
+      return next.length ? next : availableIds;
+    });
+  }, [cartItems]);
+
+  const selectedItems = useMemo(
+    () => cartItems.filter((item) => selectedIds.includes(item.id)),
+    [cartItems, selectedIds]
+  );
+
+  const selectedTotal = useMemo(() => {
+    return selectedItems.reduce((sum, item) => sum + item.totalPrice, 0);
+  }, [selectedItems]);
+
+  const toggleSelection = (id: string) => {
+    setSelectedIds((current) =>
+      current.includes(id) ? current.filter((itemId) => itemId !== id) : [...current, id]
+    );
+  };
+
+  const allSelected = selectedIds.length === cartItems.length && cartItems.length > 0;
 
   const handleCheckout = () => {
-    Alert.alert("Checkout successful", undefined, [
-      {
-        text: "OK",
-        onPress: () => {
-          clearCart();
-          router.replace("/");
-        },
-      },
-    ]);
+    if (!selectedItems.length) {
+      return;
+    }
+    setShowSuccess(true);
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={[checkoutStyles.container, { backgroundColor: colors.background }]}>
+      {cartItems.length ? (
+        <Pressable
+          onPress={() =>
+            setSelectedIds(allSelected ? [] : cartItems.map((item) => item.id))
+          }
+          style={[
+            checkoutStyles.selectAllRow,
+            { backgroundColor: colors.surface, borderColor: colors.border },
+          ]}
+        >
+          <View
+            style={[
+              checkoutStyles.selectButton,
+              {
+                borderColor: allSelected ? colors.primary : colors.border,
+                backgroundColor: allSelected ? colors.primary : "transparent",
+              },
+            ]}
+          />
+          <Text style={[checkoutStyles.selectAllText, { color: colors.text }]}>
+            {allSelected ? "All selected" : "Select all"}
+          </Text>
+        </Pressable>
+      ) : null}
       <FlatList
         data={cartItems}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.list}
+        contentContainerStyle={checkoutStyles.list}
         ListEmptyComponent={
-          <View style={styles.emptyState}>
-            <Text style={[styles.emptyTitle, { color: colors.text }]}>
+          <View style={checkoutStyles.emptyState}>
+            <Text style={[checkoutStyles.emptyTitle, { color: colors.text }]}>
               Nothing to checkout
             </Text>
-            <Text style={[styles.emptySubtitle, { color: colors.mutedText }]}>
+            <Text
+              style={[checkoutStyles.emptySubtitle, { color: colors.mutedText }]}
+            >
               Add items on Home before checking out.
             </Text>
           </View>
@@ -48,20 +98,34 @@ export default function CheckoutScreen() {
         renderItem={({ item }) => (
           <View
             style={[
-              styles.row,
+              checkoutStyles.row,
               { backgroundColor: colors.surface, borderColor: colors.border },
             ]}
           >
-            <Image source={{ uri: item.image }} style={styles.thumbnail} />
-            <View style={styles.rowBody}>
-              <Text style={[styles.productName, { color: colors.text }]}>
+            <Pressable
+              onPress={() => toggleSelection(item.id)}
+              style={[
+                checkoutStyles.selectButton,
+                {
+                  borderColor: selectedIds.includes(item.id)
+                    ? colors.primary
+                    : colors.border,
+                  backgroundColor: selectedIds.includes(item.id)
+                    ? colors.primary
+                    : "transparent",
+                },
+              ]}
+            />
+            <Image source={{ uri: item.image }} style={checkoutStyles.thumbnail} />
+            <View style={checkoutStyles.rowBody}>
+              <Text style={[checkoutStyles.productName, { color: colors.text }]}>
                 {item.name}
               </Text>
-              <Text style={[styles.quantity, { color: colors.mutedText }]}>
+              <Text style={[checkoutStyles.quantity, { color: colors.mutedText }]}>
                 Qty {item.quantity}
               </Text>
             </View>
-            <Text style={[styles.price, { color: colors.text }]}>
+            <Text style={[checkoutStyles.price, { color: colors.text }]}>
               ${item.totalPrice.toFixed(2)}
             </Text>
           </View>
@@ -70,106 +134,55 @@ export default function CheckoutScreen() {
 
       <View
         style={[
-          styles.summary,
+          checkoutStyles.summary,
           { borderColor: colors.border, backgroundColor: colors.surface },
         ]}
       >
-        <Text style={[styles.summaryText, { color: colors.text }]}>
-          Total: ${cartTotal.toFixed(2)}
+        <Text style={[checkoutStyles.summaryText, { color: colors.text }]}>
+          Selected: ${selectedTotal.toFixed(2)}
         </Text>
         <Pressable
           onPress={handleCheckout}
           style={({ pressed }) => [
-            styles.checkoutButton,
+            checkoutStyles.checkoutButton,
             {
               backgroundColor: colors.primary,
-              opacity: pressed || !cartItems.length ? 0.7 : 1,
+              opacity: pressed || !selectedItems.length ? 0.7 : 1,
             },
           ]}
-          disabled={!cartItems.length}
+          disabled={!selectedItems.length}
         >
-          <Text style={styles.checkoutText}>Checkout</Text>
+          <Text style={checkoutStyles.checkoutText}>Checkout</Text>
         </Pressable>
       </View>
+
+      <Modal transparent visible={showSuccess} animationType="fade">
+        <View style={checkoutStyles.modalBackdrop}>
+          <View
+            style={[
+              checkoutStyles.modalCard,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+            ]}
+          >
+            <Text style={[checkoutStyles.modalTitle, { color: colors.text }]}>
+              Checkout successful
+            </Text>
+            <Pressable
+              onPress={() => {
+                setShowSuccess(false);
+                removeItems(selectedIds);
+                router.replace("/");
+              }}
+              style={[
+                checkoutStyles.modalButton,
+                { backgroundColor: colors.primary },
+              ]}
+            >
+              <Text style={checkoutStyles.modalButtonText}>OK</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-  },
-  list: {
-    gap: 12,
-    paddingBottom: 140,
-  },
-  row: {
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    gap: 12,
-  },
-  thumbnail: {
-    width: 52,
-    height: 52,
-    borderRadius: 12,
-  },
-  rowBody: {
-    flex: 1,
-  },
-  productName: {
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  quantity: {
-    marginTop: 4,
-    fontSize: 12,
-  },
-  price: {
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  summary: {
-    position: "absolute",
-    left: 20,
-    right: 20,
-    bottom: 20,
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-  },
-  summaryText: {
-    fontSize: 16,
-    fontWeight: "700",
-  },
-  checkoutButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: 999,
-  },
-  checkoutText: {
-    color: "#FFFFFF",
-    fontWeight: "700",
-    fontSize: 13,
-  },
-  emptyState: {
-    paddingVertical: 40,
-    alignItems: "center",
-    gap: 8,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    textAlign: "center",
-  },
-});
