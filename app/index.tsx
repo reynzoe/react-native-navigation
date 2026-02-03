@@ -89,6 +89,7 @@ export default function HomeScreen() {
               <Text
                 style={[homeStyles.productName, { color: colors.text }]}
                 numberOfLines={2}
+                ellipsizeMode="tail"
               >
                 {item.name}
               </Text>

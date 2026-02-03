@@ -42,6 +42,36 @@ export const checkoutStyles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "700",
   },
+  checkoutControls: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  controlButton: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    borderWidth: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  controlText: {
+    fontSize: 16,
+    fontWeight: "700",
+  },
+  checkoutQty: {
+    fontSize: 14,
+    fontWeight: "700",
+    minWidth: 18,
+    textAlign: "center",
+  },
+  overQtyHint: {
+    marginLeft: "auto",
+    fontSize: 10,
+    fontWeight: "600",
+    letterSpacing: 0.3,
+    textTransform: "uppercase",
+  },
   selectButton: {
     width: 26,
     height: 26,

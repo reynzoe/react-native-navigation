@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FlatList,
   Image,
+  Modal,
   Pressable,
   Text,
   View,
@@ -15,6 +16,13 @@ export default function CartScreen() {
   const router = useRouter();
   const { cartItems, addToCart, removeFromCart, cartTotal } = useCartContext();
   const { colors, mode } = useThemeContext();
+  const [pendingRemove, setPendingRemove] = useState<
+    | {
+        id: string;
+        name: string;
+      }
+    | null
+  >(null);
 
   return (
     <View style={[cartStyles.container, { backgroundColor: colors.background }]}>
@@ -50,7 +58,13 @@ export default function CartScreen() {
             </View>
             <View style={cartStyles.controls}>
               <Pressable
-                onPress={() => removeFromCart(item)}
+                onPress={() => {
+                  if (item.quantity <= 1) {
+                    setPendingRemove({ id: item.id, name: item.name });
+                    return;
+                  }
+                  removeFromCart(item);
+                }}
                 style={({ pressed }) => [
                   cartStyles.controlButton,
                   { borderColor: colors.border, opacity: pressed ? 0.6 : 1 },
@@ -109,6 +123,60 @@ export default function CartScreen() {
           </Text>
         </Pressable>
       </View>
+
+      <Modal transparent visible={!!pendingRemove} animationType="fade">
+        <View style={cartStyles.modalBackdrop}>
+          <View
+            style={[
+              cartStyles.modalCard,
+              { backgroundColor: colors.surface, borderColor: colors.border },
+            ]}
+          >
+            <Text style={[cartStyles.modalTitle, { color: colors.text }]}>
+              {pendingRemove
+                ? `${pendingRemove.name} will be removed from your cart.`
+                : ""}
+            </Text>
+            <View style={cartStyles.modalActions}>
+              <Pressable
+                onPress={() => setPendingRemove(null)}
+                style={[
+                  cartStyles.modalGhostButton,
+                  { borderColor: colors.border },
+                ]}
+              >
+                <Text style={[cartStyles.modalGhostText, { color: colors.text }]}>
+                  Go Back
+                </Text>
+              </Pressable>
+              <Pressable
+                onPress={() => {
+                  if (pendingRemove) {
+                    const item = cartItems.find((cartItem) => cartItem.id === pendingRemove.id);
+                    if (item) {
+                      removeFromCart(item);
+                    }
+                  }
+                  setPendingRemove(null);
+                }}
+                style={[
+                  cartStyles.modalButton,
+                  { backgroundColor: colors.primary },
+                ]}
+              >
+                <Text
+                  style={[
+                    cartStyles.modalButtonText,
+                    { color: mode === "dark" ? "#111111" : "#FFFFFF" },
+                  ]}
+                >
+                  Proceed
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 }

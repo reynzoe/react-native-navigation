@@ -20,6 +20,7 @@ type CartContextValue = {
   removeFromCart: (product: Product) => void;
   clearCart: () => void;
   removeItems: (ids: string[]) => void;
+  reduceItems: (quantities: Record<string, number>) => void;
 };
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
@@ -234,6 +235,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return next;
     });
   };
+  const reduceItems = (quantitiesToReduce: Record<string, number>) => {
+    setQuantities((current) => {
+      const next = { ...current };
+      Object.entries(quantitiesToReduce).forEach(([id, qty]) => {
+        const currentQty = next[id] ?? 0;
+        const nextQty = currentQty - qty;
+        if (nextQty <= 0) {
+          delete next[id];
+        } else {
+          next[id] = nextQty;
+        }
+      });
+      return next;
+    });
+  };
 
   const cartItems = useMemo<CartItem[]>(() => {
     return PRODUCTS.filter((product) => quantities[product.id]).map((product) => {
@@ -259,6 +275,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       removeFromCart,
       clearCart,
       removeItems,
+      reduceItems,
     }),
     [cartItems, cartTotal]
   );

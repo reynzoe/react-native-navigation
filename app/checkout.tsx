@@ -16,13 +16,16 @@ import { checkoutStyles } from "../styles/checkoutStyles";
 export default function CheckoutScreen() {
   const router = useRouter();
   const navigation = useNavigation();
-  const { cartItems, clearCart, removeItems } = useCartContext();
+  const { cartItems, removeItems } = useCartContext();
   const { colors, mode } = useThemeContext();
   const [selectedIds, setSelectedIds] = useState<string[]>(
     cartItems.map((item) => item.id)
   );
   const [showSuccess, setShowSuccess] = useState(false);
-  const selectionColor = "#00ff53";
+  const selectionColor = "#16A34A";
+  const [checkoutQuantities, setCheckoutQuantities] = useState<
+    Record<string, number>
+  >({});
 
   useEffect(() => {
     setSelectedIds((current) => {
@@ -30,21 +33,57 @@ export default function CheckoutScreen() {
       const next = current.filter((id) => availableIds.includes(id));
       return next.length ? next : availableIds;
     });
+    setCheckoutQuantities((current) => {
+      const next: Record<string, number> = { ...current };
+      cartItems.forEach((item) => {
+        if (!next[item.id] || next[item.id] > item.quantity) {
+          next[item.id] = item.quantity;
+        }
+      });
+      Object.keys(next).forEach((id) => {
+        if (!cartItems.find((item) => item.id === id)) {
+          delete next[id];
+        }
+      });
+      return next;
+    });
   }, [cartItems]);
 
   const selectedItems = useMemo(
-    () => cartItems.filter((item) => selectedIds.includes(item.id)),
-    [cartItems, selectedIds]
+    () =>
+      cartItems.filter((item) => selectedIds.includes(item.id)).map((item) => ({
+        ...item,
+        checkoutQuantity: checkoutQuantities[item.id] ?? item.quantity,
+      })),
+    [cartItems, selectedIds, checkoutQuantities]
   );
 
   const selectedTotal = useMemo(() => {
-    return selectedItems.reduce((sum, item) => sum + item.totalPrice, 0);
+    return selectedItems.reduce(
+      (sum, item) => sum + item.price * item.checkoutQuantity,
+      0
+    );
   }, [selectedItems]);
 
   const toggleSelection = (id: string) => {
     setSelectedIds((current) =>
       current.includes(id) ? current.filter((itemId) => itemId !== id) : [...current, id]
     );
+  };
+
+  const adjustCheckoutQty = (id: string, maxQty: number, delta: number) => {
+    setCheckoutQuantities((current) => {
+      const base = current[id] ?? maxQty;
+      const nextQty = Math.max(1, base + delta);
+      return { ...current, [id]: nextQty };
+    });
+  };
+
+  const increaseCheckoutQty = (id: string, maxQty: number) => {
+    setCheckoutQuantities((current) => {
+      const base = current[id] ?? maxQty;
+      return { ...current, [id]: base + 1 };
+    });
   };
 
   const allSelected = selectedIds.length === cartItems.length && cartItems.length > 0;
@@ -129,12 +168,48 @@ export default function CheckoutScreen() {
                 {item.name}
               </Text>
               <Text style={[checkoutStyles.quantity, { color: colors.mutedText }]}>
-                Qty {item.quantity}
+                In cart: {item.quantity}
               </Text>
             </View>
-            <Text style={[checkoutStyles.price, { color: colors.text }]}>
-              ${item.totalPrice.toFixed(2)}
-            </Text>
+            <View style={checkoutStyles.checkoutControls}>
+              <Pressable
+                onPress={() => adjustCheckoutQty(item.id, item.quantity, -1)}
+                style={({ pressed }) => [
+                  checkoutStyles.controlButton,
+                  { borderColor: colors.border, opacity: pressed ? 0.6 : 1 },
+                ]}
+              >
+                <Text style={[checkoutStyles.controlText, { color: colors.text }]}>
+                  -
+                </Text>
+              </Pressable>
+              <Text style={[checkoutStyles.checkoutQty, { color: colors.text }]}>
+                {checkoutQuantities[item.id] ?? item.quantity}
+              </Text>
+              <Pressable
+                onPress={() => increaseCheckoutQty(item.id, item.quantity)}
+                style={({ pressed }) => [
+                  checkoutStyles.controlButton,
+                  { borderColor: colors.border, opacity: pressed ? 0.6 : 1 },
+                ]}
+              >
+                <Text style={[checkoutStyles.controlText, { color: colors.text }]}>
+                  +
+                </Text>
+              </Pressable>
+              <Text style={[checkoutStyles.price, { color: colors.text }]}>
+                $
+                {(
+                  item.price *
+                  (checkoutQuantities[item.id] ?? item.quantity)
+                ).toFixed(2)}
+              </Text>
+            </View>
+            {(checkoutQuantities[item.id] ?? item.quantity) > item.quantity ? (
+              <Text style={[checkoutStyles.overQtyHint, { color: colors.mutedText }]}>
+                Above added qty
+              </Text>
+            ) : null}
           </View>
         )}
       />
