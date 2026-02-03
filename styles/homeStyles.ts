@@ -43,10 +43,13 @@ export const homeStyles = StyleSheet.create({
   cardBody: {
     padding: 12,
     gap: 6,
+    minHeight: 86,
   },
   productName: {
     fontSize: 13,
     fontWeight: "700",
+    lineHeight: 16,
+    minHeight: 32,
   },
   price: {
     fontSize: 12,
@@ -59,6 +62,7 @@ export const homeStyles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     alignItems: "center",
+    marginBottom: 10,
   },
   addButtonText: {
     fontSize: 11,

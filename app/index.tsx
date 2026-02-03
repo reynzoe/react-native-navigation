@@ -66,7 +66,7 @@ export default function HomeScreen() {
               { color: mode === "dark" ? "#111111" : "#FFFFFF" },
             ]}
           >
-            Go to Cart {cartCount ? `(${cartCount})` : ""}
+            Go to Bag {cartCount ? `(${cartCount})` : ""}
           </Text>
         </Pressable>
       </View>
@@ -86,7 +86,10 @@ export default function HomeScreen() {
           >
             <Image source={{ uri: item.image }} style={homeStyles.image} />
             <View style={homeStyles.cardBody}>
-              <Text style={[homeStyles.productName, { color: colors.text }]}>
+              <Text
+                style={[homeStyles.productName, { color: colors.text }]}
+                numberOfLines={2}
+              >
                 {item.name}
               </Text>
               <Text style={[homeStyles.price, { color: colors.mutedText }]}>

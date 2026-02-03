@@ -14,14 +14,13 @@ export function ThemeToggle() {
         { backgroundColor: colors.surface, borderColor: colors.border },
       ]}
     >
-      <View
+      <Text
         style={[
-          styles.indicator,
-          { backgroundColor: isDark ? colors.primary : colors.border },
+          styles.icon,
+          { color: isDark ? colors.primary : colors.text },
         ]}
-      />
-      <Text style={[styles.label, { color: colors.text }]}>
-        {isDark ? "Dark" : "Light"}
+      >
+        {isDark ? "☾" : "☀"}
       </Text>
     </Pressable>
   );
@@ -37,14 +36,9 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     gap: 6,
   },
-  indicator: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: "600",
-    letterSpacing: 0.3,
+  icon: {
+    fontSize: 14,
+    fontWeight: "700",
+    letterSpacing: 0.4,
   },
 });

@@ -18,8 +18,8 @@ function AppStack() {
         headerRight: () => <ThemeToggle />,
       }}
     >
-      <Stack.Screen name="index" options={{ title: "BKLYN" }} />
-      <Stack.Screen name="cart" options={{ title: "Cart" }} />
+      <Stack.Screen name="index" options={{ title: "RNZCART" }} />
+      <Stack.Screen name="cart" options={{ title: "Bag" }} />
       <Stack.Screen name="checkout" options={{ title: "Checkout" }} />
     </Stack>
   );

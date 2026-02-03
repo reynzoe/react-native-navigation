@@ -25,7 +25,7 @@ export default function CartScreen() {
         ListEmptyComponent={
           <View style={cartStyles.emptyState}>
             <Text style={[cartStyles.emptyTitle, { color: colors.text }]}>
-              Your cart is empty
+              Your bag is empty
             </Text>
             <Text style={[cartStyles.emptySubtitle, { color: colors.mutedText }]}>
               Add something from Home to get started.
