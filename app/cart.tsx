@@ -14,7 +14,7 @@ import { cartStyles } from "../styles/cartStyles";
 export default function CartScreen() {
   const router = useRouter();
   const { cartItems, addToCart, removeFromCart, cartTotal } = useCartContext();
-  const { colors } = useThemeContext();
+  const { colors, mode } = useThemeContext();
 
   return (
     <View style={[cartStyles.container, { backgroundColor: colors.background }]}>
@@ -99,7 +99,14 @@ export default function CartScreen() {
           ]}
           disabled={!cartItems.length}
         >
-          <Text style={cartStyles.checkoutText}>Go to Checkout</Text>
+          <Text
+            style={[
+              cartStyles.checkoutText,
+              { color: mode === "dark" ? "#111111" : "#FFFFFF" },
+            ]}
+          >
+            Go to Checkout
+          </Text>
         </Pressable>
       </View>
     </View>

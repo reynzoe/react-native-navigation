@@ -32,10 +32,22 @@ const PRODUCTS: Product[] = [
     image: "https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/ea0e5050-dce2-41a2-aee4-a984991c3f42/GIANNIS+IMMORTALITY+4+EP.png",
   },
   {
+    id: "n1w",
+    name: "Nike x Stussy Utility Hooded Jacket",
+    price: 160.0,
+    image: "https://static.nike.com/a/images/w_1280,q_auto,f_auto/4ffce8b1-a1cc-427d-b96a-e1d58beb67fa/nike-x-st%C3%BCssy-apparel-collection-release-date.jpg",
+  },
+  {
     id: "n2",
     name: "Nike Zoom Pulse",
     price: 98.5,
     image: "https://media.about.nike.com/img/c0e87578-1c7c-4f32-b177-1ac4d0fcd31a/nikenews-doernbecherfreestyle2019-airzoompulse-sawyer-xvi-13306-91593.jpg?m=eyJlZGl0cyI6eyJqcGVnIjp7InF1YWxpdHkiOjEwMH0sIndlYnAiOnsicXVhbGl0eSI6MTAwfSwiZXh0cmFjdCI6eyJsZWZ0IjowLCJ0b3AiOjAsIndpZHRoIjoxNjAwLCJoZWlnaHQiOjExOTl9LCJyZXNpemUiOnsid2lkdGgiOjM4NDB9fX0%3D&s=5742b866d0d64157b5541bf0ed56b14c7b8a992aa57ccdf0b80e5035d10503a7",
+  },
+  {
+    id: "n1c",
+    name: "Miami Heat 2025 City Edition Black 9FIFTY Snapback Cap",
+    price: 55.0,
+    image: "https://neweracap.ph/cdn/shop/files/60761373_03305373_3.jpg?v=1764858664&width=2000"
   },
   {
     id: "n3",
@@ -51,9 +63,9 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "a1",
-    name: "Adidas Aero Bounce",
+    name: "ANTHONY EDWARDS 2 Bruce Lee",
     price: 110.0,
-    image: "https://picsum.photos/seed/adidas-shoe-1/600/600",
+    image: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/b5e556629f3f4d1eaddcd1deff15c6ea_9366/anthony-edwards-2-shoes.jpg",
   },
   {
     id: "a2",
@@ -63,15 +75,15 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "a3",
-    name: "Adidas Core Tee",
+    name: "adidas Basketball Tee (Gender Neutral)",
     price: 28.0,
-    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/ea463696df344113ae4daf2401290d9a_faec/Train_Essentials_Training_Tee_Blue_IC7429_db01_laydown.jpg",
+    image: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/32fdb350e8f44ac78d714c314c8b4675_9366/adidas-basketball-tee-gender-neutral.jpg",
   },
   {
     id: "a4",
-    name: "Adidas Sprint Shorts",
+    name: "Adidas Run It Shorts",
     price: 36.0,
-    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/d9baa6784ac4477494dc2599d74177f7_9366/Runners_CLIMACOOL_Shorts_Black_JC7371_HM1.jpg",
+    image: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/021457aba7064bdcb47f0539d1fa6af7_9366/run-it-shorts.jpg",
   },
   {
     id: "b1",
@@ -87,9 +99,9 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "b3",
-    name: "New Balance Active Tee",
+    name: "New Balance Sport Essentials Space Dye 1/4 Zip",
     price: 30.0,
-    image: "https://dynamic.zacdn.com/onrXJmKOmmwyW1xNs5Fc-dy6Gp8=/filters:quality(70):format(webp)/https://static-ph.zacdn.com/p/new-balance-5225-2542123-1.jpg",
+    image: "https://nb.scene7.com/is/image/NB/wt41150ahh_nb_55_i?$pdpflexf22x$&qlt=80&fmt=webp&wid=880&hei=880",
   },
   {
     id: "b4",
@@ -111,9 +123,9 @@ const PRODUCTS: Product[] = [
   },
   {
     id: "a5",
-    name: "Adidas Cloud Foam",
+    name: "Harden Volume 9",
     price: 102.0,
-    image: "https://assets.adidas.com/images/w_600,f_auto,q_auto/95098164f20c4f0195a8dfefcf0dbc28_9366/Cloudfoam_Move_Sock_Shoes_Blue_ID6521_01_00_standard.jpg",
+    image: "https://assets.adidas.com/images/w_766,h_766,f_auto,q_auto,fl_lossy,c_fill,g_auto/e739b34ad5344f3fa5e8e7f84aef0783_9366/harden-volume-9.jpg",
   },
   {
     id: "a6",
@@ -154,8 +166,38 @@ const PRODUCTS: Product[] = [
   {
     id: "n8",
     name: `Nike Book 2 "The Phoenix"`,
-    price: 20.0,
+    price: 80.0,
     image: "https://static.nike.com/a/images/w_1280,q_auto,f_auto/c126fb00-d566-49ce-9833-9a515f51b7bc/book-2-phoenix-sundial-and-black-ib6688-700-release-date.jpg",
+  },
+  {
+    id: "n9",
+    name: `Sabrina 3`,
+    price: 75.0,
+    image:"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto,u_9ddf04c7-2a9a-4d76-add1-d15af8f0263d,c_scale,fl_relative,w_1.0,h_1.0,fl_layer_apply/88618e46-179f-4af2-8924-246e751170b3/SABRINA+3+EP.png"
+  },
+  {
+    id: "n10",
+    name: `Tottenham Hotspur 2025/26 Stadium Home`,
+    price: 55.0,
+    image:"https://static.nike.com/a/images/t_web_pw_592_v2/f_auto/207642cc-1751-4799-ba1a-b4b3ca9a8dc5/THFC+M+NK+DF+JSY+SS+STAD+HM.png",
+  },
+  {
+    id: "n11",
+    name: `F.C. Barcelona 2025/26 Stadium Home`,
+    price: 57.0,
+    image:"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/a62f5ffa-30fb-40ea-aeb9-2739fea3d557/FCB+M+NK+DF+JSY+SS+STAD+HM.png",
+  },
+  {
+    id: "n12",
+    name: `Nike Women's Slim Retro Polo Top`,
+    price: 24.0,
+    image:"https://static.nike.com/a/images/t_web_pdp_535_v2/f_auto/838a371c-e101-47bc-939d-aa55da9e9687/AS+W+NSW+RETRO+POLO+SPD.png",
+  },
+  {
+    id: "b8",
+    name: "New Balance KAWHI IV BBKLSSP4",
+    price: 130.0,
+    image:"https://image-cdn.hypb.st/https%3A%2F%2Fhypebeast.com%2Fimage%2F2024%2F01%2F26%2Fkawhi-leonard-new-balance-kawhi-4-bbklssp4-release-date-01.jpg?q=75&w=800&cbr=1&fit=max",
   },
 ];
 

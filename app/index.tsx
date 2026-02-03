@@ -15,7 +15,7 @@ import { homeStyles } from "../styles/homeStyles";
 export default function HomeScreen() {
   const router = useRouter();
   const { products, addToCart, cartItems } = useCartContext();
-  const { colors } = useThemeContext();
+  const { colors, mode } = useThemeContext();
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastOpacity = useRef(new Animated.Value(0)).current;
@@ -60,7 +60,12 @@ export default function HomeScreen() {
             { backgroundColor: colors.primary, opacity: pressed ? 0.85 : 1 },
           ]}
         >
-          <Text style={homeStyles.ctaText}>
+          <Text
+            style={[
+              homeStyles.ctaText,
+              { color: mode === "dark" ? "#111111" : "#FFFFFF" },
+            ]}
+          >
             Go to Cart {cartCount ? `(${cartCount})` : ""}
           </Text>
         </Pressable>

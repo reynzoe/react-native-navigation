@@ -8,18 +8,21 @@ import {
   View,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 import { useCartContext } from "../contexts/CartContext";
 import { useThemeContext } from "../contexts/ThemeContext";
 import { checkoutStyles } from "../styles/checkoutStyles";
 
 export default function CheckoutScreen() {
   const router = useRouter();
+  const navigation = useNavigation();
   const { cartItems, clearCart, removeItems } = useCartContext();
-  const { colors } = useThemeContext();
+  const { colors, mode } = useThemeContext();
   const [selectedIds, setSelectedIds] = useState<string[]>(
     cartItems.map((item) => item.id)
   );
   const [showSuccess, setShowSuccess] = useState(false);
+  const selectionColor = "#00ff53";
 
   useEffect(() => {
     setSelectedIds((current) => {
@@ -69,8 +72,8 @@ export default function CheckoutScreen() {
             style={[
               checkoutStyles.selectButton,
               {
-                borderColor: allSelected ? colors.primary : colors.border,
-                backgroundColor: allSelected ? colors.primary : "transparent",
+                borderColor: allSelected ? selectionColor : colors.border,
+                backgroundColor: allSelected ? selectionColor : "transparent",
               },
             ]}
           />
@@ -108,14 +111,18 @@ export default function CheckoutScreen() {
                 checkoutStyles.selectButton,
                 {
                   borderColor: selectedIds.includes(item.id)
-                    ? colors.primary
+                    ? selectionColor
                     : colors.border,
                   backgroundColor: selectedIds.includes(item.id)
-                    ? colors.primary
+                    ? selectionColor
                     : "transparent",
                 },
               ]}
-            />
+            >
+              {selectedIds.includes(item.id) ? (
+                <Text style={checkoutStyles.checkMark}>✓</Text>
+              ) : null}
+            </Pressable>
             <Image source={{ uri: item.image }} style={checkoutStyles.thumbnail} />
             <View style={checkoutStyles.rowBody}>
               <Text style={[checkoutStyles.productName, { color: colors.text }]}>
@@ -152,7 +159,14 @@ export default function CheckoutScreen() {
           ]}
           disabled={!selectedItems.length}
         >
-          <Text style={checkoutStyles.checkoutText}>Checkout</Text>
+          <Text
+            style={[
+              checkoutStyles.checkoutText,
+              { color: mode === "dark" ? "#111111" : "#FFFFFF" },
+            ]}
+          >
+            Checkout
+          </Text>
         </Pressable>
       </View>
 
@@ -171,14 +185,26 @@ export default function CheckoutScreen() {
               onPress={() => {
                 setShowSuccess(false);
                 removeItems(selectedIds);
-                router.replace("/");
+                navigation.dispatch(
+                  CommonActions.reset({
+                    index: 0,
+                    routes: [{ name: "index" as never }],
+                  })
+                );
               }}
               style={[
                 checkoutStyles.modalButton,
                 { backgroundColor: colors.primary },
               ]}
             >
-              <Text style={checkoutStyles.modalButtonText}>OK</Text>
+              <Text
+                style={[
+                  checkoutStyles.modalButtonText,
+                  { color: mode === "dark" ? "#111111" : "#FFFFFF" },
+                ]}
+              >
+                OK
+              </Text>
             </Pressable>
           </View>
         </View>

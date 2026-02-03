@@ -13,8 +13,10 @@ export const homeStyles = StyleSheet.create({
     marginBottom: 12,
   },
   title: {
-    fontSize: 24,
-    fontWeight: "700",
+    fontSize: 22,
+    fontWeight: "800",
+    letterSpacing: 0.6,
+    textTransform: "uppercase",
   },
   grid: {
     paddingBottom: 120,
@@ -25,9 +27,14 @@ export const homeStyles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    borderRadius: 16,
+    borderRadius: 20,
     borderWidth: 1,
     overflow: "hidden",
+    shadowColor: "#000000",
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 2,
   },
   image: {
     width: "100%",
@@ -38,33 +45,38 @@ export const homeStyles = StyleSheet.create({
     gap: 6,
   },
   productName: {
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  price: {
     fontSize: 13,
     fontWeight: "700",
   },
+  price: {
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.2,
+  },
   addButton: {
     marginTop: 6,
-    paddingVertical: 8,
-    borderRadius: 10,
+    paddingVertical: 7,
+    borderRadius: 12,
     borderWidth: 1,
     alignItems: "center",
   },
   addButtonText: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: "700",
+    textTransform: "uppercase",
+    letterSpacing: 0.6,
   },
   cta: {
     paddingHorizontal: 14,
-    paddingVertical: 10,
+    paddingVertical: 9,
     borderRadius: 999,
   },
   ctaText: {
     color: "#FFFFFF",
     fontWeight: "700",
-    fontSize: 13,
+    fontSize: 12,
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
   },
   toast: {
     position: "absolute",
@@ -82,7 +94,9 @@ export const homeStyles = StyleSheet.create({
     elevation: 2,
   },
   toastText: {
-    fontSize: 13,
-    fontWeight: "600",
+    fontSize: 12,
+    fontWeight: "700",
+    letterSpacing: 0.5,
+    textTransform: "uppercase",
   },
 });
